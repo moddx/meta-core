@@ -1,6 +1,6 @@
 #meta-core
 
-This repository represents core-library of the project.
+This repository represents the core-library of the project.
 It is used by the backend-library and the frontend-library.
 
 ## Dependencies
