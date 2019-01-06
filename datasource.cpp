@@ -81,9 +81,10 @@ namespace META { namespace Core {
         return result;
     }
 
-    void DataSource::appendResult(const DataSet &result) {
+    bool DataSource::appendResult(const DataSet &result) {
         std::lock_guard<std::mutex> lock(resultsMutex);    // locks results for scope
         this->results.push_back(result);
+        return hasAllResults();
     }
 
     void DataSource::appendResult(vector<DataSet> results) {
@@ -137,8 +138,11 @@ namespace META { namespace Core {
     void DataSource::markFinished() {
         std::unique_lock<std::mutex> lock(finishedMutex);
 
-        std::cout << "Marking DataSource finished.\n";
-        finishedCond.notify_all();
+        if(!finishedFlag) {     // prevent multiple notifications
+            std::cout << "Marking DataSource finished.\n";
+            finishedFlag = true;
+            finishedCond.notify_all();
+        }
     }
 
     void DataSource::waitUntilFinished() {

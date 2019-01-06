@@ -34,7 +34,7 @@ namespace META { namespace Core {
         DataSet getNextElement();
         bool hasNextResult() const;
         DataSet getNextResult();
-        void appendResult(const DataSet &result);
+        bool appendResult(const DataSet &result);
         void appendResult(vector<DataSet> results);
 
         // convenience
@@ -52,7 +52,8 @@ namespace META { namespace Core {
         vector<DataSet> results;
         std::mutex dataMutex;
         std::mutex resultsMutex;
-
+        
+        bool finishedFlag = false;
         std::mutex finishedMutex;
         std::condition_variable finishedCond;
     };
